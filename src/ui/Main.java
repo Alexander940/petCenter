@@ -1,9 +1,6 @@
 package ui;
 
 import model.PetCenter;
-import model.Priority;
-import model.Species;
-import model.State;
 
 import java.util.Scanner;
 
@@ -23,7 +20,7 @@ public class Main {
         do{
             option = main.showMenu();
             main.operations(option);
-        }while(false);
+        }while(option != 0);
     }
 
     /**
@@ -57,6 +54,8 @@ public class Main {
             case 2:
                 addVeterinary();
                 break;
+            case 3:
+                break;
         }
     }
 
@@ -65,12 +64,17 @@ public class Main {
      * */
 
     public void addPet(){
-        Species species = getSpecies();
-        String [] dataPet = dataPet();
-        Priority priority = getPriority();
         String [] dataOwner = dataOwner();
+        String [] dataPet = dataPet(dataOwner[1]);
+        String species = getSpecies();
+        String priority = getPriority();
 
-        petCenter.addPet(dataPet, species, State.WAITING, priority, dataOwner);
+        if(dataOwner[1] == "already"){
+            System.out.println(petCenter.addPet(dataPet, species, priority));
+
+        } else {
+            System.out.println(petCenter.addPet(dataPet, species, priority, dataOwner));
+        }
     }
 
     /**
@@ -78,11 +82,25 @@ public class Main {
      * @return <i>dataPet String []</i> it contains the pet's data
      * */
 
-    public String [] dataPet(){
+    public String [] dataPet(String verification){
         String [] dataPet = new String[4];
+        boolean toogle = false;
+        boolean cent = false;
         
-        System.out.println("Enter pet's name");
-        dataPet[0] = sc.nextLine();
+        do{
+            System.out.println("Enter pet's name");
+            dataPet[0] = sc.nextLine();
+            if(verification == "already"){
+                cent = petCenter.findPet(dataPet[0]);
+                if(cent){
+                    System.out.println("This owner already have a pet with this name"); 
+                    toogle = true;
+                } else {
+                    toogle = false;
+                    petCenter.clearPetPosition();
+                }
+            }
+        }while(toogle);
 
         System.out.println("Enter pet's age");
         dataPet[1] = sc.nextLine();
@@ -102,19 +120,29 @@ public class Main {
      * */
 
     public String [] dataOwner(){
-        String [] dataOwner = new String[4];
+        String [] dataOwner = new String[4];//it's method's return
+        boolean toogle = true;//it gets feedback about the existence of the name
 
-        System.out.println("Enter owner's identify");
-        dataOwner[0] = sc.nextLine();
 
         System.out.println("Enter owner's name");
         dataOwner[1] = sc.nextLine();
+        toogle = petCenter.findOwner(dataOwner[1]);
 
-        System.out.println("Enter owner's phone");
-        dataOwner[2] = sc.nextLine();
+        if(toogle){
+            System.out.println("This owner is already");
+            dataOwner[1] = "already";
+        }
 
-        System.out.println("Enter owner's address");
-        dataOwner[3] = sc.nextLine();
+        if(!toogle){
+            System.out.println("Enter owner's identify");
+            dataOwner[0] = sc.nextLine();
+
+            System.out.println("Enter owner's phone");
+            dataOwner[2] = sc.nextLine();
+
+            System.out.println("Enter owner's address");
+            dataOwner[3] = sc.nextLine();
+        }
 
         return dataOwner;
     }
@@ -123,35 +151,33 @@ public class Main {
      * <b>Description:</b> it gets the pet's priority 
      * @return <i>priority Priority</i> it contains the pet's priority
      * */
-    public Priority getPriority(){
-        Priority priority = Priority.RED;
-        String answer;
 
-        System.out.println("Which is the priority?");
-        System.out.println("red, orange, yellow, green, blue");
-        answer = sc.nextLine();
+    public String getPriority(){
+        String answer;
         boolean cent = true;//it controls the cycle do while
+
         
         do{
+            System.out.println("Which is the priority?");
+            System.out.println("red, orange, yellow, green, blue");
+            answer = sc.nextLine();
+
             if(answer.equalsIgnoreCase("red")){
-                priority = Priority.RED;
                 cent = false;
             } else if(answer.equalsIgnoreCase("orange")){
-                priority = Priority.ORANGE;
                 cent = false;
             } else if(answer.equalsIgnoreCase("yellow")){
-                priority = Priority.YELLOW;
                 cent = false;
             } else if(answer.equalsIgnoreCase("green")){
-                priority = Priority.GREEN;
                 cent = false;
             } else if(answer.equalsIgnoreCase("blue")){
-                priority = Priority.BLUE;
                 cent = false;
+            } else {
+                System.out.println("Option wrong");
             }
         }while(cent);
         
-        return priority;
+        return answer;
     }
 
     /**
@@ -159,36 +185,30 @@ public class Main {
      * @return <i>species Species</i> it constains the pet's species
      * */
 
-    public Species getSpecies(){
-        Species species = Species.DOG;//it's method's return
+    public String getSpecies(){
         String answer;//it constains user's answer
         boolean cent = true;//it controls the cycle do while
 
         do{
-            System.out.println("Which is the species");
+            System.out.println("Which is the species?");
             answer = sc.nextLine();
 
             if(answer.equalsIgnoreCase("dog")){
-                species = Species.DOG;
                 cent = false;
             } else if(answer.equalsIgnoreCase("cat")){
-                species = Species.CAT;
                 cent = false;
             } else if(answer.equalsIgnoreCase("rabbit")){
-                species = Species.RABBIT;
                 cent = false;
             } else if(answer.equalsIgnoreCase("reptile")){
-                species = Species.REPTILE;
                 cent = false;
             } else if(answer.equalsIgnoreCase("bird")){
-                species = Species.BIRD;
                 cent = false;
             } else {
                 System.out.println("The option is wrong");
             }
         }while(cent);
 
-        return species;
+        return answer;
     }
 
     /**
