@@ -65,15 +65,15 @@ public class Main {
 
     public void addPet(){
         String [] dataOwner = dataOwner();
-        String [] dataPet = dataPet(dataOwner[1]);
-        String species = getSpecies();
+        String [] species = getSpecies();
+        String [] dataPet = dataPet(dataOwner[1], species[1]);
         String priority = getPriority();
 
         if(dataOwner[1] == "already"){
-            System.out.println(petCenter.addPet(dataPet, species, priority));
+            System.out.println(petCenter.addPet(dataPet, species[0], priority));
 
         } else {
-            System.out.println(petCenter.addPet(dataPet, species, priority, dataOwner));
+            System.out.println(petCenter.addPet(dataPet, species[0], priority, dataOwner));
         }
     }
 
@@ -82,7 +82,7 @@ public class Main {
      * @return <i>dataPet String []</i> it contains the pet's data
      * */
 
-    public String [] dataPet(String verification){
+    public String [] dataPet(String verification, String raceVerification){
         String [] dataPet = new String[4];
         boolean toogle = false;
         boolean cent = false;
@@ -105,8 +105,10 @@ public class Main {
         System.out.println("Enter pet's age");
         dataPet[1] = sc.nextLine();
 
-        System.out.println("Enter pet's race");
-        dataPet[2] = sc.nextLine();
+        if(raceVerification == null){
+            System.out.println("Enter pet's race");
+            dataPet[2] = sc.nextLine();
+        }
 
         System.out.println("Enter pet's symptom");
         dataPet[3] = sc.nextLine();
@@ -185,28 +187,32 @@ public class Main {
      * @return <i>species Species</i> it constains the pet's species
      * */
 
-    public String getSpecies(){
-        String answer;//it constains user's answer
+    public String [] getSpecies(){
+        String [] answer = new String[2];//it constains user's answer
         boolean cent = true;//it controls the cycle do while
 
         do{
             System.out.println("Which is the species?");
-            answer = sc.nextLine();
+            answer[0] = sc.nextLine();
 
-            if(answer.equalsIgnoreCase("dog")){
+            if(answer[0].equalsIgnoreCase("dog")){
                 cent = false;
-            } else if(answer.equalsIgnoreCase("cat")){
+            } else if(answer[0].equalsIgnoreCase("cat")){
                 cent = false;
-            } else if(answer.equalsIgnoreCase("rabbit")){
+            } else if(answer[0].equalsIgnoreCase("rabbit")){
                 cent = false;
-            } else if(answer.equalsIgnoreCase("reptile")){
+            } else if(answer[0].equalsIgnoreCase("reptile")){
                 cent = false;
-            } else if(answer.equalsIgnoreCase("bird")){
+            } else if(answer[0].equalsIgnoreCase("bird")){
                 cent = false;
             } else {
                 System.out.println("The option is wrong");
             }
         }while(cent);
+
+        if(answer[0].equalsIgnoreCase("rabbit") || answer[0].equalsIgnoreCase("reptile") || answer[0].equalsIgnoreCase("bird")){
+            answer[1] = "race no required";
+        }
 
         return answer;
     }

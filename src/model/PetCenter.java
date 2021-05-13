@@ -32,7 +32,11 @@ public class PetCenter {
     public String addPet(String [] dataPet, String species, String priority, String [] dataOwner){
         Species cSpecies = getSpecies(species);
         Priority cPriority = getPriority(priority);
-        pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[2], dataPet[3], cSpecies, State.WAITING, cPriority, new Owner(dataOwner[0], dataOwner[1], dataOwner[2], dataOwner[3]));
+        if(dataPet[2] == null){
+            pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[3], cSpecies, State.WAITING, cPriority, new Owner(dataOwner[0], dataOwner[1], dataOwner[2], dataOwner[3]));    
+        } else {
+            pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[2], dataPet[3], cSpecies, State.WAITING, cPriority, new Owner(dataOwner[0], dataOwner[1], dataOwner[2], dataOwner[3]));
+        }
         petNumber++;
 
         return "Pet was created";
@@ -50,7 +54,11 @@ public class PetCenter {
     public String addPet(String [] dataPet, String species, String priority){
         Species cSpecies = getSpecies(species);
         Priority cPriority = getPriority(priority);
-        pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[2], dataPet[3], cSpecies, State.WAITING, cPriority, this.owner); 
+        if(dataPet[2] == null){
+            pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[3], cSpecies, State.WAITING, cPriority, this.owner);
+        } else {
+            pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[2], dataPet[3], cSpecies, State.WAITING, cPriority, this.owner); 
+        }
         petNumber++;
 
         return "Pet was created";

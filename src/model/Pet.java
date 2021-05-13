@@ -22,6 +22,16 @@ public class Pet {
         this.owner = owner;
     }
 
+    public Pet(String name, String age, String symptom, Species species, State state, Priority priority, Owner owner){
+        this.name = name;
+        this.age = age;
+        this.symptom = symptom;
+        this.species = species;
+        this.state = state;
+        this.priority = priority;
+        this.owner = owner;
+    }
+
     /**
      * <b>Description:</b> it get pet into appoinment
      * <b>pre:</b> state should be
