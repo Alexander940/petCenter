@@ -38,9 +38,18 @@ public class Pet {
      * @param veterinary <i>Veterinary</i> it contains the pet's veterinary
      * */
 
-    public void getOnAppoinment(Veterinary veterinary){
+    public void getIntoAppointment(Veterinary veterinary){
         state = State.CONSULT;
         this.veterinary = veterinary;
+    }
+
+    /**
+     * <b>Description:</b> it get pet out of appoinment
+     * @param state <i>State</i>
+     * */
+
+    public void getOutAppointment(State state){
+        this.state = state;
     }
 
     /**
@@ -77,5 +86,14 @@ public class Pet {
 
     public String getName(){
         return name;
+    }
+    
+    /**
+     * <b>Description:</b> it allows get the veterinary's value
+     * <b>pre:</b> veterinary should be
+     * */
+
+    public Veterinary getVeterinary(){
+        return veterinary;
     }
 }

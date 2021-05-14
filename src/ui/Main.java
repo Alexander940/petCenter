@@ -34,7 +34,8 @@ public class Main {
         System.out.println("What do you wanna do\n" +
                             "1. add a pet\n" +
                             "2. add a veterinary \n" + 
-                            "3. start appointment \n" +
+                            "3. starting appointment \n" +
+                            "4. ending appointment \n" +
                             "0. Close petCenter"
                 );
 
@@ -60,6 +61,7 @@ public class Main {
                 startAppointment();
                 break;
             case 4:
+                endAppointment();
                 break;
         }
     }
@@ -260,6 +262,36 @@ public class Main {
      * */
 
     public void startAppointment(){
-        System.out.println(petCenter.startAppoinment());
+        System.out.println(petCenter.startAppointment());
+    }
+
+    /**
+     * <b>Description:</b> it ends a appointment
+     * */
+
+    public void endAppointment(){
+        String petName;//it contains the pet's name to get out of appointment
+        String idVeterinary;//it constains the veterinary's id to get out of appointment
+        String state = "";// it contains the state to assign to the pet
+        boolean cent = true;
+
+        System.out.println("Enter pet's name");    
+        petName = sc.nextLine();
+
+        System.out.println("Enter veterinary's identify");
+        idVeterinary = sc.nextLine();
+
+        do{
+            System.out.println("Enter transfer if the pet needs to be hospitalized or authorized if the pet can go out the pet center");
+            state = sc.nextLine();
+
+            if(state.equalsIgnoreCase("transfer")){
+                cent = false;
+            } else if(state.equalsIgnoreCase("authorized")){
+                cent = false;
+            }
+        }while(cent);
+
+        petCenter.endAppointment(petName, idVeterinary, state);
     }
 }

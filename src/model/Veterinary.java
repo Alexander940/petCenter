@@ -21,7 +21,16 @@ public class Veterinary extends Person {
      * <b>Description:</b> it allows get the value of veterinary's state <br>
      * <b>pre:</b> veterinaryState should be
      * */
+
     public VeterinaryState getVeterinaryState(){
         return veterinaryState;
+    }
+
+    /**
+     * <b>Description:</b> it changes the veterinary state
+     * */
+
+    public void getOutAppointment(){
+        this.veterinaryState = VeterinaryState.FREE;
     }
 }

@@ -139,13 +139,13 @@ public class PetCenter {
      * @return <i>feedback String</i> it contains feedback about starting a appoinment
      * */
 
-    public String startAppoinment(){
+    public String startAppointment(){
         String feedback = "";//it's method's return
         int positionVeterinary = findFreeVeterinary();//it contains the position with a free veterinary
         int positionPet = nextPet();//it contains the postion of next pet to be assits
 
         if(positionVeterinary != -1 && positionPet != -1){
-            pets[positionPet].getOnAppoinment(veterinaries[positionVeterinary]);
+            pets[positionPet].getIntoAppointment(veterinaries[positionVeterinary]);
             veterinaries[positionVeterinary].startAppoinment();
             feedback = "The pet " + pets[positionPet].getName() + " of " + pets[positionPet].getOwner().getName() + "is into consult " + "\n" +
                 "with veterinary " + veterinaries[positionVeterinary].getName() + "\n" + 
@@ -165,6 +165,85 @@ public class PetCenter {
         }
 
         return feedback;
+    }
+
+    /**
+     * <b>Description:</b> it ends a appointment
+     * */
+
+    public String endAppointment(String petName, String idVeterinary, String state){
+        String feedback = "";//it's method's return
+        int positionPet;//it contains the position of pet to get out appointment
+        int positionVeterinary = findVeterinary(idVeterinary);//it contains the position of veterinary to get out appointment
+
+        if(positionVeterinary != -1){
+            positionPet = findPet(petName, veterinaries[positionVeterinary]);
+            if(positionPet != -1){
+                pets[positionPet].getOutAppointment(getState(state)); 
+                veterinaries[positionVeterinary].getOutAppointment();
+            } else {
+                System.out.println("There isn't a pet with that veterinary");
+            }
+        } else {
+            System.out.println("There isn't a veterinary with that identify");
+        }   
+
+        return feedback;
+    }
+
+    /**
+     * <b>Description:</b> it gets state in type string and converting to type State 
+     * @param state <i>String</i> it contains the state in type String
+     * @return <i>cState State</i> it contains the state in type State
+     * */
+
+    public State getState(String state){
+        State cState = State.TRANSFER;
+
+        if(state.equalsIgnoreCase("authorized")){
+            cState = State.AUTHORIZED;
+        }
+
+        return cState;
+    }
+
+    /**
+     * <b>Description:</b> it finds a pet with his name and his veterinary<br>
+     * <b>pre:</b> array pets should be
+     * @param name <i>String</i> it contains the pet's name for searching
+     * @param veterinary <i>Veterinary</i> it contains the pet's veterinary for searching
+     * @return <i>int Position</i> it contains the postion of pet found
+     * */
+
+    public int findPet(String name, Veterinary veterinary){
+        int position = -1;//it's method's return
+
+        for(int i = 0; i < petNumber; i++){
+            if(pets[i].getName() == name && pets[i].getVeterinary() == veterinary && pets[i].getState() == State.CONSULT){
+                position = i;
+            }
+        }
+
+        return position;
+    }
+
+    /**
+     * <b>Description</b> it finds a veterinary with his identify<br>
+     * <b>pre:</b> array veterinaries should be
+     * @param id <i>String</i> it contains the identify of veterinary for searching 
+     * @return <i>position int</i> it contains the position of veterinary found
+     * */
+
+    public int findVeterinary(String id){
+        int position = -1;//it's method's return
+
+        for(int i = 0; i < vetNumber; i++){
+            if(veterinaries[i].getId() == id && veterinaries[i].getVeterinaryState() == VeterinaryState.CONSULT){
+                position = i;
+            }
+        }
+
+        return position;
     }
 
     /**
