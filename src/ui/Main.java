@@ -33,7 +33,9 @@ public class Main {
 
         System.out.println("What do you wanna do\n" +
                             "1. add a pet\n" +
-                            "2. add a veterinary" 
+                            "2. add a veterinary \n" + 
+                            "3. start appointment \n" +
+                            "0. Close petCenter"
                 );
 
         option = sc.nextInt();
@@ -55,6 +57,9 @@ public class Main {
                 addVeterinary();
                 break;
             case 3:
+                startAppointment();
+                break;
+            case 4:
                 break;
         }
     }
@@ -224,7 +229,7 @@ public class Main {
     public void addVeterinary(){
         String [] data = dataVeterinary();
 
-        petCenter.addVeterinary(data);
+        System.out.println(petCenter.addVeterinary(data));
     }
 
     /**
@@ -255,6 +260,6 @@ public class Main {
      * */
 
     public void startAppointment(){
-
+        System.out.println(petCenter.startAppoinment());
     }
 }

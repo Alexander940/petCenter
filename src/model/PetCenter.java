@@ -3,7 +3,6 @@ package model;
 public class PetCenter {
     public int MAX_VETERINARIES = 7;//it's the maximum of veterinaries
     public int MAX_PETS = 120;//it's the maximum of pets allowed per day
-    private int vetsAvailable;//it contains the number of veterinaries avalaible
     private int petNumber;//it contains the number of pets in the pet center
     private int vetNumber;// it contains the number of veterinaries in the pet center
     private Pet [] pets;//it contains all instans of pets
@@ -120,21 +119,70 @@ public class PetCenter {
      * @param veterinaryState <i>VeterinaryState</i> it contains the veterinary's state
      * */
 
-    public void addVeterinary(String [] data){
-        veterinaries[vetNumber] = new Veterinary(data[0], data[1], data[2], data[3], VeterinaryState.FREE);
-        vetNumber++;
-        vetsAvailable++;
+    public String addVeterinary(String [] data){
+        String feedback;
+
+        if(vetNumber <= 7){
+            veterinaries[vetNumber] = new Veterinary(data[0], data[1], data[2], data[3], VeterinaryState.FREE);
+            vetNumber++;
+            feedback = "veterinary was created";
+        } else {
+            feedback = "there are already 7 veterinaries, you can't add any other";
+        }
+
+        return feedback;
     }
 
     /**
      * <b>Description:</b> it starts an appoinment<br>
      * <b>pre:</b> the instance called should be in veterinaries, vetsAvailable rest one
+     * @return <i>feedback String</i> it contains feedback about starting a appoinment
      * */
 
-    public void startAppoinment(){
-        veterinaries[(vetNumber-vetsAvailable)+1].startAppoinment();
-        vetsAvailable--;
-        pets[nextPet()].getOnAppoinment(veterinaries[(vetNumber-vetsAvailable)+1]);
+    public String startAppoinment(){
+        String feedback = "";//it's method's return
+        int positionVeterinary = findFreeVeterinary();//it contains the position with a free veterinary
+        int positionPet = nextPet();//it contains the postion of next pet to be assits
+
+        if(positionVeterinary != -1 && positionPet != -1){
+            pets[positionPet].getOnAppoinment(veterinaries[positionVeterinary]);
+            veterinaries[positionVeterinary].startAppoinment();
+            feedback = "The pet " + pets[positionPet].getName() + " of " + pets[positionPet].getOwner().getName() + "is into consult " + "\n" +
+                "with veterinary " + veterinaries[positionVeterinary].getName() + "\n" + 
+                "veterinary's identify is " + veterinaries[positionVeterinary].getId();
+        } else {
+            if(vetNumber == 0){
+                feedback = "There aren't veterinaries yet \n";
+            } else if(positionVeterinary == -1){
+                feedback = "There aren't veterinaries available \n";
+            }
+
+            if(petNumber == 0){
+                feedback += "There aren't pets yet";
+            } else if(positionPet == -1){
+                feedback += "There aren't pets to be assits";
+            }
+        }
+
+        return feedback;
+    }
+
+    /**
+     * <b>Description:</b> it find a free veterinary <br>
+     * <b>pre:</b> array veterinaries should be
+     * @return <i>position int</i> it contains the position of free veterinary
+     * */
+
+    public int findFreeVeterinary(){
+        int position = -1;// it's method's return
+
+        for(int i = 0; i < vetNumber; i++){
+            if(veterinaries[i].getVeterinaryState() == VeterinaryState.FREE){
+                position = i;
+            }
+        }
+
+        return position;
     }
 
     /**
@@ -173,7 +221,7 @@ public class PetCenter {
      * */
 
     public int nextPetPriority(Priority mPriority){
-        int nextPet = 0;//it's method's return
+        int nextPet = -1;//it's method's return
         boolean cent = false;//it controls cycle for
 
         for(int i = 0; i < petNumber && !cent; i++){
