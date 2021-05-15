@@ -4,11 +4,21 @@ import model.PetCenter;
 
 import java.util.Scanner;
 
+/**
+ * it's main class
+ * @author Alexander Echeverry
+ * @version 1.0
+ * */
+
 public class Main {
     private Scanner sc;//it contains the instance of Scanner class
     private PetCenter petCenter;//it contains the instance of PetCenter class
 
-    Main(){
+    /**
+     * it's constructor method
+     * */
+
+    private Main(){
         sc = new Scanner(System.in);
         petCenter = new PetCenter();
     }
@@ -36,6 +46,9 @@ public class Main {
                             "2. add a veterinary \n" + 
                             "3. starting appointment \n" +
                             "4. ending appointment \n" +
+                            "5. number of pets without attention\n" +
+                            "6. delete a veterinary\n" +
+                            "7. remove a pet without attention\n" +
                             "0. Close petCenter"
                 );
 
@@ -62,6 +75,18 @@ public class Main {
                 break;
             case 4:
                 endAppointment();
+                break;
+            case 5:
+                findPets();
+                break;
+            case 6:
+                deletedVeterinary();
+                break;
+            case 7: 
+                removePet();
+                break;
+            case 0: 
+                closePetCenter();
                 break;
         }
     }
@@ -293,5 +318,51 @@ public class Main {
         }while(cent);
 
         petCenter.endAppointment(petName, idVeterinary, state);
+    }
+
+    /**
+     * <b>Description:</b> it gets and showing the number of pets waiting for assisting
+     * */
+
+    public void findPets(){
+        System.out.println("The number of pets waiting for assisting is " + petCenter.findPets());
+    }
+
+    /**
+     * <b>Description:</b> it gets the vet's identify for deleted and it shows feedback about process
+     * */
+
+    public void deletedVeterinary(){
+        String id;
+
+        System.out.println("Enter vet's identify");
+        id = sc.nextLine();
+
+        System.out.println(petCenter.deleteVeterinary(id));
+    }
+
+    /**
+     * <b>Description:</b> it gets the pet and owner's name and it shows feedback about if pet was remove
+     * */
+
+    public void removePet(){
+        String petName;
+        String ownerName;
+
+        System.out.println("Enter pet's name");
+        petName = sc.nextLine();
+
+        System.out.println("Enter owner's name");
+        ownerName = sc.nextLine();
+
+        System.out.println(petCenter.removePet(petName, ownerName));
+    }
+
+    /**
+     * <b>Description:</b> it gets and it shows the statistics of pet center
+     * */
+
+    public void closePetCenter(){
+        System.out.println(petCenter.closePetCenter());
     }
 }

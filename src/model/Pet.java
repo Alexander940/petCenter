@@ -1,5 +1,11 @@
 package model;
 
+/**
+ * <b>Description</b> this class contains the attributes and methods of a pet
+ * @author Alexander Echeverry
+ * @version 1.0
+ * */
+
 public class Pet {
     private String name;//it's pet's name
     private String age;//it's pet's age 
@@ -11,6 +17,18 @@ public class Pet {
     private Owner owner;//it's pet's owner
     private Veterinary veterinary;//it's pet's veterinary
 
+    /**
+     * <b>Description:</b> it's constructor method, it creates a pet with his race
+     * @param name <i>String</i> it contains pet's name
+     * @param age <i>String</i> it contains pet's age
+     * @param race <i>String</i> it contains pet's race
+     * @param symptom <i>String</i> it contains pet's symptom
+     * @param species <i>Species</i> it contains pet's species
+     * @param state <i>State</i> it contains pet's state
+     * @param priority <i>Priority</i> it contains pet's priority
+     * @param owner <i>Owner</i> it contains pet's owner
+     * */
+
     public Pet(String name, String age, String race, String symptom, Species species, State state, Priority priority, Owner owner){
         this.name = name;
         this.age = age;
@@ -21,6 +39,17 @@ public class Pet {
         this.priority = priority;
         this.owner = owner;
     }
+
+    /**
+     * <b>Description:</b> it's constructor method, it creates a pet without his race
+     * @param name <i>String</i> it contains pet's name
+     * @param age <i>String</i> it contains pet's age
+     * @param symptom <i>String</i> it contains pet's symptom
+     * @param species <i>Species</i> it contains pet's species
+     * @param state <i>State</i> it contains pet's state
+     * @param priority <i>Priority</i> it contains pet's priority
+     * @param owner <i>Owner</i> it contains pet's owner
+     * */
 
     public Pet(String name, String age, String symptom, Species species, State state, Priority priority, Owner owner){
         this.name = name;
@@ -89,11 +118,20 @@ public class Pet {
     }
     
     /**
-     * <b>Description:</b> it allows get the veterinary's value
+     * <b>Description:</b> it allows get the veterinary's value<br>
      * <b>pre:</b> veterinary should be
      * */
 
     public Veterinary getVeterinary(){
         return veterinary;
+    }
+
+    /**
+     * <b>Description:</b> it allows changing the value of state<br>
+     * <b>pos:</b> state changes his value
+     * */
+
+    public void setState(State state){
+        this.state = state;
     }
 }

@@ -1,14 +1,24 @@
 package model;
 
+/**
+ * <b>Description:</b> this class contains the attributes and methods of a pet center
+ * @author Alexander Echeverry
+ * @version 1.0
+ * */
+
 public class PetCenter {
-    public int MAX_VETERINARIES = 7;//it's the maximum of veterinaries
-    public int MAX_PETS = 120;//it's the maximum of pets allowed per day
+    public final int MAX_VETERINARIES = 7;//it's the maximum of veterinaries
+    public final int MAX_PETS = 120;//it's the maximum of pets allowed per day
     private int petNumber;//it contains the number of pets in the pet center
     private int vetNumber;// it contains the number of veterinaries in the pet center
     private Pet [] pets;//it contains all instans of pets
     private Veterinary [] veterinaries;// it contains all instances of veterinaries
     private int [] petPosition;//it contains the positions where a same owner have pets
     private Owner owner;//it contains the owner to assign the new pet
+
+    /**
+     * <b>Description</b> it's constructor method
+     * */
 
     public PetCenter(){
         pets = new Pet[MAX_PETS];
@@ -359,7 +369,7 @@ public class PetCenter {
     }
 
     /**
-     * <b>Description:</b> it changes of values of array petPosition to 0
+     * <b>Description:</b> it changes all values of array petPosition to 0
      * */
 
     public void clearPetPosition(){
@@ -367,4 +377,162 @@ public class PetCenter {
             petPosition[i] = 0;
         }
     }
+
+    /**
+     * <b>Description:</b> it finds pet in state waiting<br>
+     * <b>pre:</b> array pets should be
+     * @return <i>num int</i> it contains the number of pets waiting 
+     * */
+
+    public int findPets(){
+        int num = 0;//it's method's return
+
+        for(int i = 0; i < petNumber; i++){
+            if(pets[i].getState() == State.WAITING){
+                num++;
+            }
+        }
+
+        return num;
+    }
+
+    /**
+     * <b>Description:</b> it deletes a veterinary, it gets his identify
+     * <b>Pre:</b> array veterinaries should be
+     * <b>Pos:</b> if the vet is found, it deletes a object of array veterinaries
+     * @return <i>feedback String</i> it contains feedback about if vet was deleted
+     * */
+
+    public String deleteVeterinary(String id){
+        String feedback = "Already there are pet, you can't delete a veterinary";//it's method's return
+
+        if(petNumber == 0){
+            feedback = "There isn't a veterinary with this identify";
+            for(int i = 0; i < vetNumber; i++){
+                if(veterinaries[i].getId() == id){
+                    veterinaries[i] = null;
+                    feedback = "Veterinary was deleted";
+                }
+            }
+        }
+
+        return feedback;
+    }
+
+    /**
+     * <b>Description:</b> it changes pet's state to without attention
+     * @param petName <i>String</i> it contains pet's name to remove 
+     * @param ownerName <i>String</i> it contains owner's name of pet to remove 
+     * @return <i>feedback String</i> it return feedback about if pet was removed
+     * */
+
+    public String removePet(String petName, String ownerName){
+        String feedback = "There isn't a pet with that name and that owner";//it's method's return
+        
+        for(int i = 0; i < petNumber; i++){
+            if(pets[i].getName().equalsIgnoreCase(petName) && pets[i].getOwner().getName().equalsIgnoreCase(ownerName)){
+                if(pets[i].getState() == State.WAITING){
+                    pets[i].setState(State.WITHOUT_ATTENTION);
+                    feedback = "The pet was removed";
+                } else {
+                    feedback = "This pet isn´t in waiting state, you can't remove it";
+                }
+            }
+        }
+
+        return feedback;
+    }
+
+    /**
+     * <b>Description:</b> it return the statistics of pet center<br>
+     * <b>pre:</b> array veterinaries should be
+     * @return <i>feedback String</i> it contains the statistics of pet center
+     * */
+
+    public String closePetCenter(){
+        String feedback = "";//it's method's return
+        Veterinary vet = veterinaries[0];//it contains the vet with more appointments done
+        int [] petsAssist = new int[5];
+        int petsWithOutAttention = petsWithOutAttention();
+        double percentage = 0.0;
+        int petsWaiting = findPets();
+
+        if(petsWaiting == 0){
+            for(int i = 0; i < vetNumber; i++){
+                if(veterinaries[i].getAppointmentsNumber() > vet.getAppointmentsNumber()){
+                    vet = veterinaries[i];
+                }
+            }
+
+            petsAssist[0] = petsAssistPerPriority(Priority.RED);
+            petsAssist[1] = petsAssistPerPriority(Priority.ORANGE);
+            petsAssist[2] = petsAssistPerPriority(Priority.YELLOW);
+            petsAssist[3] = petsAssistPerPriority(Priority.GREEN);
+            petsAssist[4] = petsAssistPerPriority(Priority.BLUE);
+
+            percentage = (petsWithOutAttention*100)/petNumber;
+
+            feedback = "The vet with more appointments is " + vet.getName() + "\n" +
+                       "in priority red was assits " + petsAssist[0] + " pets\n" +
+                       "in priority orange was assits " + petsAssist[1] + " pets\n" +
+                       "in priority yellow was assits " + petsAssist[2] + " pets\n" +
+                       "in priority green was assits " + petsAssist[3] + " pets\n" +
+                       "in priority blue was assits " + petsAssist[4] + " pets\n" +
+                       "the percentage of pets they was gone with attention is " + percentage + "%";
+
+            clearPets();
+        } else {
+            feedback = "There are pets waiting for being to assits, you can't close the pet center";
+        }
+        
+        return feedback;
+    }
+
+    /**
+     * <b>Description:</b> it gets the number of pets assits in a priority
+     * <b>pre:</b> array pets should be
+     * @param priority <i>Priority</i> it contains the priority for searching
+     * @return <i>num int</i> it contains the number of pets assits in the priority
+     * */
+
+    public int petsAssistPerPriority(Priority priority){
+        int num = 0;//it's method's return
+
+        for(int i = 0; i < petNumber; i++){
+            if(pets[i].getPriority() == priority && pets[i].getState() != State.WITHOUT_ATTENTION){
+                num++;
+            }
+        }
+
+        return num;
+    }
+
+    /**
+     * <b>Description:</b> it finds pets in state without attention<br>
+     * <b>pre:</b> array pets should be
+     * @return <i>int num</i> it contains the number of pets in state without attention
+     * */
+    
+    public int petsWithOutAttention(){
+        int num = 0;//it's method's return 
+
+        for(int i = 0; i < petNumber; i++){
+            if(pets[i].getState() == State.WITHOUT_ATTENTION){
+                num++;
+            }
+        }
+
+        return num;
+    }
+
+    /**
+     * <b>Description:</b> it resets the all values of array pets to null<br>
+     * <b>pre:</b> array pets should be
+     * */
+
+    public void clearPets(){
+        for(int i = 0; i < petNumber; i++){
+            pets[i] = null;
+        }
+    }   
 }   

@@ -1,8 +1,20 @@
 package model;
 
+/**
+ * <b>Description:</b> this class contains the attributes of methods of a person
+ * @author Alexander Echeverry
+ * @version 1.0
+ * */
+
 public abstract class Person {
     private String id;
     private String name;
+
+    /**
+     * <b>Description:</b> it's constructor method
+     * @param id <i>String</i> it contains person's identify
+     * @param name <i>String</i> it contains person's name
+     * */
 
     public Person(String id, String name){
         this.id = id;
