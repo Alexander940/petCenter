@@ -24,13 +24,14 @@ public class Main {
     }
 
     public static void main(String [] args){
-        Main main = new Main();
+        Main ppal = new Main();
         int option;
+        boolean toggle;
 
         do{
-            option = main.showMenu();
-            main.operations(option);
-        }while(option != 0);
+            option = ppal.showMenu();
+            toggle = ppal.operations(option);
+        }while(toggle);
     }
 
     /**
@@ -62,7 +63,9 @@ public class Main {
      * <b>Description:</b> it execute the operations
      * */
 
-    public void operations(int option){
+    public boolean operations(int option){
+        boolean toggle = true;
+
         switch(option){
             case 1:
                 addPet();
@@ -86,9 +89,11 @@ public class Main {
                 removePet();
                 break;
             case 0: 
-                closePetCenter();
+                toggle = closePetCenter();
                 break;
         }
+
+        return toggle;
     }
 
     /**
@@ -298,7 +303,7 @@ public class Main {
         String petName;//it contains the pet's name to get out of appointment
         String idVeterinary;//it constains the veterinary's id to get out of appointment
         String state = "";// it contains the state to assign to the pet
-        boolean cent = true;
+        boolean cent = true;//it controls the cycle do while
 
         System.out.println("Enter pet's name");    
         petName = sc.nextLine();
@@ -317,7 +322,7 @@ public class Main {
             }
         }while(cent);
 
-        petCenter.endAppointment(petName, idVeterinary, state);
+        System.out.println(petCenter.endAppointment(petName, idVeterinary, state));
     }
 
     /**
@@ -333,7 +338,7 @@ public class Main {
      * */
 
     public void deletedVeterinary(){
-        String id;
+        String id;//it constains the vet's identify to delete
 
         System.out.println("Enter vet's identify");
         id = sc.nextLine();
@@ -346,8 +351,8 @@ public class Main {
      * */
 
     public void removePet(){
-        String petName;
-        String ownerName;
+        String petName;//it contains the pet's name to remove it
+        String ownerName;//it contains the owner's name of pet to remove it
 
         System.out.println("Enter pet's name");
         petName = sc.nextLine();
@@ -362,7 +367,16 @@ public class Main {
      * <b>Description:</b> it gets and it shows the statistics of pet center
      * */
 
-    public void closePetCenter(){
-        System.out.println(petCenter.closePetCenter());
+    public boolean closePetCenter(){
+        String feedback = petCenter.closePetCenter();
+        boolean toggle = false;
+
+        System.out.println(feedback);
+
+        if(feedback.equalsIgnoreCase("There are pets waiting for being to assits, you can't close the pet center")){
+            toggle = true;
+        }
+        
+        return toggle;
     }
 }

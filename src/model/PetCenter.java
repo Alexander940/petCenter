@@ -157,7 +157,7 @@ public class PetCenter {
         if(positionVeterinary != -1 && positionPet != -1){
             pets[positionPet].getIntoAppointment(veterinaries[positionVeterinary]);
             veterinaries[positionVeterinary].startAppoinment();
-            feedback = "The pet " + pets[positionPet].getName() + " of " + pets[positionPet].getOwner().getName() + "is into consult " + "\n" +
+            feedback = "The pet " + pets[positionPet].getName() + " of " + pets[positionPet].getOwner().getName() + " is into consult " + "\n" +
                 "with veterinary " + veterinaries[positionVeterinary].getName() + "\n" + 
                 "veterinary's identify is " + veterinaries[positionVeterinary].getId();
         } else {
@@ -191,11 +191,12 @@ public class PetCenter {
             if(positionPet != -1){
                 pets[positionPet].getOutAppointment(getState(state)); 
                 veterinaries[positionVeterinary].getOutAppointment();
+                feedback = "Appointment was ended";
             } else {
-                System.out.println("There isn't a pet with that veterinary");
+                feedback = "There isn't a pet with that veterinary";
             }
         } else {
-            System.out.println("There isn't a veterinary with that identify");
+            feedback = "There isn't a veterinary with that identify";
         }   
 
         return feedback;
@@ -229,7 +230,7 @@ public class PetCenter {
         int position = -1;//it's method's return
 
         for(int i = 0; i < petNumber; i++){
-            if(pets[i].getName() == name && pets[i].getVeterinary() == veterinary && pets[i].getState() == State.CONSULT){
+            if(pets[i].getName().equalsIgnoreCase(name) && pets[i].getVeterinary() == veterinary && pets[i].getState() == State.CONSULT){
                 position = i;
             }
         }
@@ -248,7 +249,7 @@ public class PetCenter {
         int position = -1;//it's method's return
 
         for(int i = 0; i < vetNumber; i++){
-            if(veterinaries[i].getId() == id && veterinaries[i].getVeterinaryState() == VeterinaryState.CONSULT){
+            if(veterinaries[i].getId().equalsIgnoreCase(id) && veterinaries[i].getVeterinaryState() == VeterinaryState.CONSULT){
                 position = i;
             }
         }
@@ -336,7 +337,7 @@ public class PetCenter {
      * */
 
     public boolean findOwner(String name){
-        boolean toogle = false;
+        boolean toogle = false;//it's method's return
         int count = 0;
 
         for(int i = 0;pets[i] != null && i < petNumber; i++){
@@ -357,7 +358,7 @@ public class PetCenter {
      * @return <i>toogle boolean</i> it contains feedback about if pet was found
      * */
     public boolean findPet(String name){
-        boolean toogle = false;
+        boolean toogle = false;//it's method's return
         
         for(int i = 0; i < petPosition.length && !toogle; i++){
             if(pets[petPosition[i]].getName().equalsIgnoreCase(name)){
@@ -452,10 +453,11 @@ public class PetCenter {
     public String closePetCenter(){
         String feedback = "";//it's method's return
         Veterinary vet = veterinaries[0];//it contains the vet with more appointments done
-        int [] petsAssist = new int[5];
-        int petsWithOutAttention = petsWithOutAttention();
-        double percentage = 0.0;
-        int petsWaiting = findPets();
+        int [] petsAssist = new int[5];//it contains tne number of pets assits per each priority
+        int petsWithOutAttention = petsWithOutAttention();//it contains the number of pets without attention
+        double percentage = 0.0;//it contains the percentage of pets they was gone without attention
+        int petsWaiting = findPets();//it contains the number of pets in state wawiting
+        String vetName = "";//it contains the vet's name with more appointments done
 
         if(petsWaiting == 0){
             for(int i = 0; i < vetNumber; i++){
@@ -472,7 +474,13 @@ public class PetCenter {
 
             percentage = (petsWithOutAttention*100)/petNumber;
 
-            feedback = "The vet with more appointments is " + vet.getName() + "\n" +
+            if(vetNumber != 0){
+                vetName = vet.getName();
+            } else {
+                vetName = "there aren't vets";
+            }
+
+            feedback = "The vet with more appointments is " + vetName + "\n" +
                        "in priority red was assits " + petsAssist[0] + " pets\n" +
                        "in priority orange was assits " + petsAssist[1] + " pets\n" +
                        "in priority yellow was assits " + petsAssist[2] + " pets\n" +
