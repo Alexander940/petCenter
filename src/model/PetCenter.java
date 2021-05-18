@@ -39,16 +39,22 @@ public class PetCenter {
      */
 
     public String addPet(String [] dataPet, String species, String priority, String [] dataOwner){
-        Species cSpecies = getSpecies(species);
-        Priority cPriority = getPriority(priority);
-        if(dataPet[2] == null){
-            pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[3], cSpecies, State.WAITING, cPriority, new Owner(dataOwner[0], dataOwner[1], dataOwner[2], dataOwner[3]));    
-        } else {
-            pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[2], dataPet[3], cSpecies, State.WAITING, cPriority, new Owner(dataOwner[0], dataOwner[1], dataOwner[2], dataOwner[3]));
-        }
-        petNumber++;
 
-        return "Pet was created";
+        String feedback = "Already there are 120 pets, you can't add any other pet";//it's method's return
+        Species cSpecies = getSpecies(species);//it contains pet's species
+        Priority cPriority = getPriority(priority);//it contains pet's priority
+
+        if(petNumber < MAX_PETS){
+            if(dataPet[2] == null){
+                pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[3], cSpecies, State.WAITING, cPriority, new Owner(dataOwner[0], dataOwner[1], dataOwner[2], dataOwner[3]));    
+            } else {
+                pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[2], dataPet[3], cSpecies, State.WAITING, cPriority, new Owner(dataOwner[0], dataOwner[1], dataOwner[2], dataOwner[3]));
+            }
+            petNumber++;
+            feedback = "Pet was created";
+        }
+
+        return feedback;
     }
 
     /**
@@ -61,16 +67,22 @@ public class PetCenter {
      */
 
     public String addPet(String [] dataPet, String species, String priority){
+
+        String feedback = "Already there are 120 pets, you can't add any other pet";//it's method's return
         Species cSpecies = getSpecies(species);
         Priority cPriority = getPriority(priority);
-        if(dataPet[2] == null){
-            pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[3], cSpecies, State.WAITING, cPriority, this.owner);
-        } else {
-            pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[2], dataPet[3], cSpecies, State.WAITING, cPriority, this.owner); 
-        }
-        petNumber++;
 
-        return "Pet was created";
+        if(petNumber < MAX_PETS){
+            if(dataPet[2] == null){
+                pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[3], cSpecies, State.WAITING, cPriority, this.owner);
+            } else {
+                pets[petNumber] = new Pet(dataPet[0], dataPet[1], dataPet[2], dataPet[3], cSpecies, State.WAITING, cPriority, this.owner); 
+            }
+            petNumber++;
+            feedback = "Pet was created";
+        }
+
+        return feedback;
     }
 
     /**
