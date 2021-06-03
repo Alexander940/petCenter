@@ -25,4 +25,13 @@ public class Owner extends Person {
         this.phone = phone;
         this.address = address;
     }
+
+    @Override
+    public String toString() {
+        return "Owner{" +
+                super.toString() +
+                ", phone=" + phone +
+                ", address=" + address +
+                '}';
+    }
 }

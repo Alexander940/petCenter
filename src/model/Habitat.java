@@ -45,4 +45,14 @@ public abstract class Habitat {
     public Pet getPet() {
         return pet;
     }
+
+    @Override
+    public String toString() {
+        return "Habitat{" +
+                "id=" + id +
+                ", longHabitat=" + longHabitat +
+                ", width=" + width +
+                ", habitatState=" + habitatState +
+                ", daysToUse=" + daysToUse;
+    }
 }

@@ -15,4 +15,11 @@ public class DogHabitat extends Habitat {
         super(id, longHabitat, width);
         this.numToys = numToys;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                ", numToys=" + numToys +
+                "} \n";
+    }
 }

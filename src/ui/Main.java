@@ -4,6 +4,8 @@ import model.PetCenter;
 
 import java.util.Scanner;
 
+import model.Habitat;
+
 /**
  * it's main class
  * @author Alexander Echeverry
@@ -112,8 +114,10 @@ public class Main {
                 System.out.println(petCenter.showMap());
                 break;
             case 4:
+                findHabitat();
                 break;
             case 5:
+                showStatisticsNursery();
                 break;
             case 0:
                 toggle = false;
@@ -499,12 +503,29 @@ public class Main {
         return toggle;
     }
 
-    public void findPetNursery(){
+    /**
+     * <b>Description:</b> it ask the name of pet for searching, it calls the method in model and show the information
+     */
+
+    private void findPetNursery(){
         String name;
 
         System.out.println("Enter the pet's name");
         name = sc.nextLine();
 
         System.out.println(petCenter.findPetNursery(name));
+    }
+
+    private void findHabitat(){
+        String id;
+
+        System.out.println("Enter habitat's id");
+        id =sc.nextLine();
+
+        System.out.println(petCenter.findHabitat(id));
+    }
+
+    private void showStatisticsNursery(){
+        System.out.println(petCenter.showStatisticsNursery());
     }
 }

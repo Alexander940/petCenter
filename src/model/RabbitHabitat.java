@@ -17,4 +17,12 @@ public class RabbitHabitat extends Habitat {
         this.typePlant = typePlant;
         this.numPlants = numPlants;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                ", typePlant=" + typePlant +
+                ", numPlants=" + numPlants +
+                "} \n";
+    }
 }

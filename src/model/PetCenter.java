@@ -9,10 +9,10 @@ import java.util.Locale;
  * */
 
 public class PetCenter {
-    public final int NUM_TYPES_HABITATS = 5;//it contains the number of habitats in kindergarten
+    public static final int NUM_TYPES_HABITATS = 5;//it contains the number of habitats in kindergarten
     public static final int MAX_HABITATS_PER_SPECIES = 9;//it contains the maximum of habitats per species
-    public final int MAX_VETERINARIES = 7;//it's the maximum of veterinaries
-    public final int MAX_PETS = 120;//it's the maximum of pets allowed per day
+    public static final int MAX_VETERINARIES = 7;//it's the maximum of veterinaries
+    public static final int MAX_PETS = 120;//it's the maximum of pets allowed per day
     private int petNumber;//it contains the number of pets in the pet center
     private int vetNumber;// it contains the number of veterinaries in the pet center
     private Pet [] pets;//it contains all instans of pets
@@ -844,4 +844,91 @@ public class PetCenter {
 
         return state;
     }
-}   
+
+    /**
+     * <b>Description:</b> it finds a habitat with his id
+     * @param id <i>String,</i> it contains the id of habitat for searching
+     * @return <i>dataHabitat String,</i> it contains the information of habitat
+     */
+
+    public String findHabitat(String id){
+        String dataHabitat = "There isn't a habitat with that id";
+        boolean cent = false;
+
+        for(int i = 0; i < NUM_TYPES_HABITATS && !cent; i++){
+            for(int j = 0; j < MAX_HABITATS_PER_SPECIES && habitats[i][j] != null && !cent; j++){
+                if(habitats[i][j].getId().equalsIgnoreCase(id)){
+                    dataHabitat = habitats[i][j].toString();
+                    if(habitats[i][j].getPet() != null){
+                        dataHabitat += habitats[i][j].getPet().toString();
+                    } else {
+                        dataHabitat += "There isn't a pet in this habitat";
+                    }
+                    cent = true;
+                }
+            }
+        }
+
+        return dataHabitat;
+    }
+
+    public String showStatisticsNursery(){
+        String statistics = "";
+        int cont = 0;
+        int totalCont = 0;
+        double [] occupation = new double[5];
+        double totalOccupation = 0.0;
+        int contSick = 0;
+        int contHealthy = 0;
+        double petSick = 0.0;
+        double petHealthy = 0.0;
+
+        for(int i = 0; i < NUM_TYPES_HABITATS; i++){
+            for(int j = 0; j < MAX_HABITATS_PER_SPECIES && habitats[i][j] != null; j++){
+                if(habitats[i][j].getHabitatState() == HabitatState.BUSY_HEALTHY){
+                    contHealthy++;
+                    cont++;
+                    totalCont++;
+                }else if(habitats[i][j].getHabitatState() == HabitatState.BUSY_SICK){
+                    contSick++;
+                    cont++;
+                    totalCont++;
+                }
+            }
+            switch(i){
+                case 0:
+                    occupation[0] = (cont*100) / 9;
+                    break;
+                case 1:
+                    occupation[1] = (cont*100) / 9;
+                    break;
+                case 2:
+                    occupation[2] = (cont*100) / 4;
+                    break;
+                case 3:
+                    occupation[3] = (cont*100) / 4;
+                    break;
+                case 4:
+                    occupation[4] = (cont*100) / 4;
+                    break;
+            }
+            cont = 0;
+        }
+
+        totalOccupation = (totalCont*100) / 30;
+        petSick = (contSick*100) / 30;
+        petHealthy = (contHealthy*100) / 30;
+
+        statistics = "**Occupation per zone** \n" +
+                "Cat zone: " + occupation[0] + "%\n" +
+                "Dog zone: " + occupation[1] + "%\n" +
+                "Reptile zone: " + occupation[2] + "%\n" +
+                "Rabbit zone: " + occupation[3] + "%\n" +
+                "Bird zone: " + occupation[4] + "%\n\n" +
+                "General occupation: " + totalOccupation + "%\n" +
+                "Percentage pets healthy: " + petHealthy + "%\n" +
+                "Percentage pets sick: " + petSick + "%\n";
+
+        return statistics;
+    }
+}

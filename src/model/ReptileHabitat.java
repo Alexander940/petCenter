@@ -17,4 +17,12 @@ public class ReptileHabitat extends Habitat {
         this.material = material;
         this.typeHabitatReptile = typeHabitatReptile;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                ", material=" + material +
+                ", typeHabitatReptile=" + typeHabitatReptile +
+                "} \n";
+    }
 }

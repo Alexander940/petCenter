@@ -20,4 +20,13 @@ public class BirdHabitat extends Habitat {
         this.height = height;
         this.typeCage = typeCage;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                ", capacity=" + capacity +
+                ", height=" + height +
+                ", typeCage=" + typeCage +
+                "} \n";
+    }
 }

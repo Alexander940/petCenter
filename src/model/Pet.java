@@ -146,4 +146,18 @@ public class Pet {
     public Species getSpecies() {
         return species;
     }
+
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "name=" + name +
+                ", age=" + age +
+                ", race=" + race +
+                ", symptom=" + symptom +
+                ", species=" + species +
+                ", state=" + state +
+                ", priority=" + priority +
+                ", veterinary=" + veterinary +
+                "} \n" + owner.toString();
+    }
 }

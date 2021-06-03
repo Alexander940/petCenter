@@ -17,4 +17,12 @@ public class CatHabitat extends Habitat {
         this.height = height;
         this.maxWeight = maxWeight;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                ", height=" + height +
+                ", maxWeight=" + maxWeight +
+                "} \n";
+    }
 }
