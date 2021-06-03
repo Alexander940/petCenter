@@ -34,7 +34,7 @@ public class PetCenter {
     /**
      * <b>Description:</b> it creates a instance of Pet in array pets with a new owner<br>
      * <b>pre:</b> array pets should be and it should be contain less than one hundred twenty instances, petNumber should be type int<br>
-     * <b>pos:</b> pets contains a new instance, petNumber sum one 
+     * <b>pos:</b> pets contains a new instance, petNumber sum one
      * @param dataPet <i>String []</i> it contains the pet's information
      * @param species <i>Species</i> it contains pet's species
      * @param priority <i>Priority</i> it contains pet's priority
@@ -211,12 +211,13 @@ public class PetCenter {
                 if(positionHabitat[0] != -1){
                     habitats[positionHabitat[0]][positionHabitat[1]].setPet(pets[positionPet]);
                     habitats[positionHabitat[0]][positionHabitat[1]].setHabitatState(HabitatState.BUSY_SICK);
+                    feedback = "The id of habitat assign is " + habitats[positionHabitat[0]][positionHabitat[1]].getId() + " ";
                 }
             }
             if(positionPet != -1){
                 pets[positionPet].getOutAppointment(getState(state)); 
                 veterinaries[positionVeterinary].getOutAppointment();
-                feedback = "Appointment was ended";
+                feedback += "Appointment was ended";
             } else {
                 feedback = "There isn't a pet with that veterinary";
             }
@@ -617,6 +618,50 @@ public class PetCenter {
         return position;
     }
 
+    public boolean habitatEmpty(String species){
+        boolean toggle = false;//it's method's return
+        boolean cent = false;
+
+        if(Species.valueOf(species.toUpperCase()) == Species.DOG){
+            for(int i = 0; i < 9 && !cent; i++){
+                if(habitats[1][i].getHabitatState() == HabitatState.EMPTY){
+                    toggle = true;
+                    cent = true;
+                }
+            }
+        } else if (Species.valueOf(species.toUpperCase()) == Species.CAT){
+            for(int i = 0; i < 9 && !cent; i++){
+                if(habitats[0][i].getHabitatState() == HabitatState.EMPTY){
+                    toggle = true;
+                    cent = true;
+                }
+            }
+        } else if (Species.valueOf(species.toUpperCase()) == Species.RABBIT){
+            for(int i = 0; i < 4 && !cent; i++){
+                if(habitats[3][i].getHabitatState() == HabitatState.EMPTY){
+                    toggle = true;
+                    cent = true;
+                }
+            }
+        } else if (Species.valueOf(species.toUpperCase()) == Species.REPTILE){
+            for(int i = 0; i < 4 && !cent; i++){
+                if(habitats[2][i].getHabitatState() == HabitatState.EMPTY){
+                    toggle = true;
+                    cent = true;
+                }
+            }
+        } else if (Species.valueOf(species.toUpperCase()) == Species.BIRD){
+            for(int i = 0; i < 4 && !cent; i++){
+                if(habitats[4][i].getHabitatState() == HabitatState.EMPTY){
+                    toggle = true;
+                    cent = true;
+                }
+            }
+        }
+
+        return toggle;
+    }
+
 
     public void createHabitats(){
         habitats[0][0] = new CatHabitat("G1", "12", "12", "12", "12");
@@ -712,5 +757,29 @@ public class PetCenter {
         }
 
         return state;
+    }
+
+    /**
+     * <b>Description:</b> it creates and assigning a pet to a habitat<br>
+     * <b>pre:</b> matrix habitats must contain objects
+     * <b>pos:</b> matrix habitats contains a pet and his state change to busy healthy
+     * @param dataPet <i>String [],</i> it contains pet's data
+     * @param dataOwner <i>String [],</i> it contains owner's data
+     * @param species <i>String</i> it contains pet's species
+     * @param daysToUse <i>int</i> it contains the days to use habitat 
+     * @return
+     */
+    public String addPet(String [] dataPet, String [] dataOwner, String species, int daysToUse){
+        String feedback = "";
+        int [] position;
+
+        position = habitatEmpty(Species.valueOf(species.toUpperCase()));
+        habitats[position[0]][position[1]].setPet(new Pet(dataPet[0], dataPet[1], dataPet[2], Species.valueOf(species.toUpperCase()), new Owner(dataOwner[0], dataOwner[1], dataOwner[2], dataOwner[3])));
+        habitats[position[0]][position[1]].setHabitatState(HabitatState.BUSY_HEALTHY);
+        habitats[position[0]][position[1]].setDaysToUse(daysToUse);
+
+        feedback = habitats[position[0]][position[1]].getId();
+
+        return feedback;
     }
 }   

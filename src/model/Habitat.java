@@ -13,6 +13,7 @@ public abstract class Habitat {
     private String width;//it contains habitat's width
     private HabitatState habitatState;//it contains habitat's state
     private Pet pet;//it contains the pet into habitat
+    private int daysToUse;//it contains the days to use the habitat
 
     public Habitat(String id, String longHabitat, String width) {
         this.id = id;
@@ -35,5 +36,9 @@ public abstract class Habitat {
 
     public void setHabitatState(HabitatState habitatState) {
         this.habitatState = habitatState;
+    }
+
+    public void setDaysToUse(int daysToUse) {
+        this.daysToUse = daysToUse;
     }
 }

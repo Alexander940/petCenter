@@ -102,7 +102,7 @@ public class Main {
 
         switch(option){
             case 1:
-
+                addPetKinder();
                 break;
             case 2:
                 break;
@@ -189,13 +189,35 @@ public class Main {
     }
 
     /**
+     * <b>Description:</b> it ask for the data of a pet to assign a habitat
+     */
+
+    private void addPetKinder(){
+        boolean toggle = false;//it controls the cycle if
+        int daysToUse = 0;
+
+        String [] species = getSpecies();
+        toggle = petCenter.habitatEmpty(species[0]);//if there is a habitat empty toggle is true, in the otherwise is false
+        if(toggle) {
+            String [] dataPet = dataPet(null, null, true);
+            String [] dataOwner = dataOwner(true);
+            System.out.println("Enter the number of days to use");
+            daysToUse = sc.nextInt();
+            sc.nextLine();
+            System.out.println(petCenter.addPet(dataPet, dataOwner, species[0], daysToUse));
+        } else {
+            System.out.println("There isn't a habitat empty");
+        }
+    }
+
+    /**
      * <b>Description:</b> it send the pet's information to class PetCenter 
      * */
 
     public void addPet(){
-        String [] dataOwner = dataOwner();
+        String [] dataOwner = dataOwner(false);//it contains the data of owner to get into, the parameter is false if the owner doesn't for kinder
         String [] species = getSpecies();
-        String [] dataPet = dataPet(dataOwner[1], species[1]);
+        String [] dataPet = dataPet(dataOwner[1], species[1], false);
         String priority = getPriority();
 
         if(dataOwner[1] == "already"){
@@ -211,7 +233,7 @@ public class Main {
      * @return <i>dataPet String []</i> it contains the pet's data
      * */
 
-    public String [] dataPet(String verification, String raceVerification){
+    public String [] dataPet(String verification, String raceVerification, boolean kinder){
         String [] dataPet = new String[4];
         boolean toogle = false;
         boolean cent = false;
@@ -239,8 +261,10 @@ public class Main {
             dataPet[2] = sc.nextLine();
         }
 
-        System.out.println("Enter pet's symptom");
-        dataPet[3] = sc.nextLine();
+        if(!kinder) {
+            System.out.println("Enter pet's symptom");
+            dataPet[3] = sc.nextLine();
+        }
 
         return dataPet;
     }
@@ -250,18 +274,19 @@ public class Main {
      * @return <i>dataOwner String []</i> it contains the owner's data
      * */
 
-    public String [] dataOwner(){
+    public String [] dataOwner(boolean kinder){
         String [] dataOwner = new String[4];//it's method's return
-        boolean toogle = true;//it gets feedback about the existence of the name
+        boolean toogle = false;//it gets feedback about the existence of the name
 
 
         System.out.println("Enter owner's name");
         dataOwner[1] = sc.nextLine();
-        toogle = petCenter.findOwner(dataOwner[1]);
-
-        if(toogle){
-            System.out.println("This owner is already");
-            dataOwner[1] = "already";
+        if(!kinder) {
+            toogle = petCenter.findOwner(dataOwner[1]);
+            if(toogle){
+                System.out.println("This owner is already");
+                dataOwner[1] = "already";
+            }
         }
 
         if(!toogle){

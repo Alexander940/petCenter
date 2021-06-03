@@ -61,6 +61,14 @@ public class Pet {
         this.owner = owner;
     }
 
+    public Pet(String name, String age, String race, Species species, Owner owner) {
+        this.name = name;
+        this.age = age;
+        this.owner = owner;
+        this.race = race;
+        this.species = species;
+    }
+
     /**
      * <b>Description:</b> it get pet into appoinment
      * <b>pre:</b> state should be
