@@ -134,4 +134,8 @@ public class Pet {
     public void setState(State state){
         this.state = state;
     }
+
+    public Species getSpecies() {
+        return species;
+    }
 }

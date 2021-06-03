@@ -7,6 +7,7 @@ package model;
  * */
 
 public class PetCenter {
+    public final int NUM_TYPES_HABITATS = 5;//it contains the number of habitats in kindergarten
     public final int MAX_VETERINARIES = 7;//it's the maximum of veterinaries
     public final int MAX_PETS = 120;//it's the maximum of pets allowed per day
     private int petNumber;//it contains the number of pets in the pet center
@@ -15,6 +16,7 @@ public class PetCenter {
     private Veterinary [] veterinaries;// it contains all instances of veterinaries
     private int [] petPosition;//it contains the positions where a same owner have pets
     private Owner owner;//it contains the owner to assign the new pet
+    private Habitat [][] habitats;//it contains the habitats in kindergarten
 
     /**
      * <b>Description</b> it's constructor method
@@ -26,6 +28,7 @@ public class PetCenter {
         veterinaries = new Veterinary[MAX_VETERINARIES];    
         petNumber = 0;
         vetNumber = 0;
+        habitats = new Habitat[NUM_TYPES_HABITATS][9];
     }
 
     /**
@@ -137,8 +140,7 @@ public class PetCenter {
      * <b>Description:</b> it creates a instance of Veterinary<br>
      * <b>pre:</b> veterinaries should be and it should contains less than seven intances, vetNumber and vetsAvailable should be type int<br>
      * <b>pos:</b> veterinaries get a new instance and vetNumber sum one
-     * @param data <i>String[]</i> it contain veterinary's information 
-     * @param veterinaryState <i>VeterinaryState</i> it contains the veterinary's state
+     * @param data <i>String[]</i> it contain veterinary's information
      * */
 
     public String addVeterinary(String [] data){
@@ -191,15 +193,26 @@ public class PetCenter {
 
     /**
      * <b>Description:</b> it ends a appointment
+     * @param petName <i>String,</i> it contains pet's name to get out appointment
+     * @param idVeterinary <i>String,</i> it contains vet's id to get out appointment
+     * @param state <i>String</i> it contains the pet's state, if this can get out or if this should be in hospitalization
      * */
 
     public String endAppointment(String petName, String idVeterinary, String state){
         String feedback = "";//it's method's return
         int positionPet;//it contains the position of pet to get out appointment
         int positionVeterinary = findVeterinary(idVeterinary);//it contains the position of veterinary to get out appointment
+        int [] positionHabitat;//it contains the position of a habitat empty
 
-        if(positionVeterinary != -1){
+        if(positionVeterinary != -1){//if positionVeterinary is equals to -1, vet doesn't exits
             positionPet = findPet(petName, veterinaries[positionVeterinary]);
+            if(state.equalsIgnoreCase("transfer")){
+                positionHabitat = habitatEmpty(pets[positionPet].getSpecies());
+                if(positionHabitat[0] != -1){
+                    habitats[positionHabitat[0]][positionHabitat[1]].setPet(pets[positionPet]);
+                    habitats[positionHabitat[0]][positionHabitat[1]].setHabitatState(HabitatState.BUSY_SICK);
+                }
+            }
             if(positionPet != -1){
                 pets[positionPet].getOutAppointment(getState(state)); 
                 veterinaries[positionVeterinary].getOutAppointment();
@@ -349,18 +362,18 @@ public class PetCenter {
      * */
 
     public boolean findOwner(String name){
-        boolean toogle = false;//it's method's return
+        boolean toggle = false;//it's method's return
         int count = 0;
 
         for(int i = 0;pets[i] != null && i < petNumber; i++){
             if(pets[i].getOwner().getName().equalsIgnoreCase(name)){
-                toogle = true;
+                toggle = true;
                 petPosition[count] = i;
                 owner = pets[i].getOwner();
             }
         }
         
-        return toogle;
+        return toggle;
     }
 
     /**
@@ -370,15 +383,15 @@ public class PetCenter {
      * @return <i>toogle boolean</i> it contains feedback about if pet was found
      * */
     public boolean findPet(String name){
-        boolean toogle = false;//it's method's return
+        boolean toggle = false;//it's method's return
         
-        for(int i = 0; i < petPosition.length && !toogle; i++){
+        for(int i = 0; i < petPosition.length && !toggle; i++){
             if(pets[petPosition[i]].getName().equalsIgnoreCase(name)){
-                toogle = true;
+                toggle = true;
             }
         }
 
-        return toogle;
+        return toggle;
     }
 
     /**
@@ -499,8 +512,6 @@ public class PetCenter {
                        "in priority green was assits " + petsAssist[3] + " pets\n" +
                        "in priority blue was assits " + petsAssist[4] + " pets\n" +
                        "the percentage of pets they was gone with attention is " + percentage + "%";
-
-            clearPets();
         } else {
             feedback = "There are pets waiting for being to assits, you can't close the pet center";
         }
@@ -554,5 +565,152 @@ public class PetCenter {
         for(int i = 0; i < petNumber; i++){
             pets[i] = null;
         }
-    }   
+    }
+
+    private int [] habitatEmpty(Species species){
+        int [] position = new int[2];//it contains the position of a habitat empty in matrix habitats
+        position[0] = -1;//it is a default value if there isn't a habitat free
+        boolean cent = false;
+
+        if(species == Species.DOG){
+            for(int i = 0; i < 9 && !cent; i++){
+                if(habitats[1][i].getHabitatState() == HabitatState.EMPTY){
+                    position[0] = 1;
+                    position[1] = i;
+                    cent = true;
+                }
+            }
+        } else if (species == Species.CAT){
+            for(int i = 0; i < 9 && !cent; i++){
+                if(habitats[0][i].getHabitatState() == HabitatState.EMPTY){
+                    position[0] = 0;
+                    position[1] = i;
+                    cent = true;
+                }
+            }
+        } else if (species == Species.RABBIT){
+            for(int i = 0; i < 4 && !cent; i++){
+                if(habitats[3][i].getHabitatState() == HabitatState.EMPTY){
+                    position[0] = 3;
+                    position[1] = i;
+                    cent = true;
+                }
+            }
+        } else if (species == Species.REPTILE){
+            for(int i = 0; i < 4 && !cent; i++){
+                if(habitats[2][i].getHabitatState() == HabitatState.EMPTY){
+                    position[0] = 2;
+                    position[1] = i;
+                    cent = true;
+                }
+            }
+        } else if (species == Species.BIRD){
+            for(int i = 0; i < 4 && !cent; i++){
+                if(habitats[4][i].getHabitatState() == HabitatState.EMPTY){
+                    position[0] = 4;
+                    position[1] = i;
+                    cent = true;
+                }
+            }
+        }
+
+        return position;
+    }
+
+
+    public void createHabitats(){
+        habitats[0][0] = new CatHabitat("G1", "12", "12", "12", "12");
+        habitats[0][1] = new CatHabitat("G2", "12", "12", "12", "12");
+        habitats[0][2] = new CatHabitat("G3", "12", "12", "12", "12");
+        habitats[0][3] = new CatHabitat("G4", "12", "12", "12", "12");
+        habitats[0][4] = new CatHabitat("G5", "12", "12", "12", "12");
+        habitats[0][5] = new CatHabitat("G6", "12", "12", "12", "12");
+        habitats[0][6] = new CatHabitat("G7", "12", "12", "12", "12");
+        habitats[0][7] = new CatHabitat("G8", "12", "12", "12", "12");
+        habitats[0][8] = new CatHabitat("G9", "12", "12", "12", "12");
+
+        habitats[1][0] = new DogHabitat("P1", "12", "12", 2);
+        habitats[1][1] = new DogHabitat("P2", "12", "12", 2);
+        habitats[1][2] = new DogHabitat("P3", "12", "12", 2);
+        habitats[1][3] = new DogHabitat("P4", "12", "12", 2);
+        habitats[1][4] = new DogHabitat("P5", "12", "12", 2);
+        habitats[1][5] = new DogHabitat("P6", "12", "12", 2);
+        habitats[1][6] = new DogHabitat("P7", "12", "12", 2);
+        habitats[1][7] = new DogHabitat("P8", "12", "12", 2);
+        habitats[1][8] = new DogHabitat("P9", "12", "12", 2);
+
+        habitats[2][0] = new ReptileHabitat("R1", "12", "12", "plastic", TypeHabitatReptile.AMPHIBIAN);
+        habitats[2][1] = new ReptileHabitat("R2", "12", "12", "plastic", TypeHabitatReptile.AMPHIBIAN);
+        habitats[2][2] = new ReptileHabitat("R3", "12", "12", "glass", TypeHabitatReptile.EARTH);
+        habitats[2][3] = new ReptileHabitat("R4", "12", "12", "glass", TypeHabitatReptile.EARTH);
+
+        habitats[3][0] = new RabbitHabitat("C1", "12", "12", "cactus", 4);
+        habitats[3][1] = new RabbitHabitat("C2", "12", "12", "cactus", 4);
+        habitats[3][2] = new RabbitHabitat("C3", "12", "12", "cactus", 4);
+        habitats[3][3] = new RabbitHabitat("C4", "12", "12", "cactus", 4);
+
+        habitats[4][0] = new BirdHabitat("A1", "12", "12", 4, "12", TypeCage.FLAT);
+        habitats[4][1] = new BirdHabitat("A2", "12", "12", 4, "12", TypeCage.FLAT);
+        habitats[4][2] = new BirdHabitat("A3", "12", "12", 4, "12", TypeCage.FLAT);
+        habitats[4][3] = new BirdHabitat("A3", "12", "12", 4, "12", TypeCage.FLAT);
+    }
+
+    public String showMap(){
+        String map = "";//it's method's return
+
+        for(int i = 0; i < 6; i++){
+            for (int j = 0; j < 5; j++){
+                if(i == 0 && j < 3){
+                    map += habitats[i][j].getId() + convertHabitatState(i,j) + " - ";
+                } else if(i == 0 && j > 2){
+                    map += habitats[i+2][j-3].getId() + convertHabitatState(i+2, j-3) + " - ";
+                }
+
+                if(i == 1 && j < 3){
+                    map += habitats[i-1][j+3].getId() + convertHabitatState(i-1, j+3) + " - ";
+                } else if (i == 1 && j > 2){
+                    map += habitats[i+1][j-1].getId() + convertHabitatState(i+1, j-1) + " - ";
+                }
+                
+                if(i == 2 && j < 3){
+                    map += habitats[i-2][j+6].getId() + convertHabitatState(i-2, j+6) + " - ";
+                } else if(i == 2 && j > 2){
+                    map += habitats[i+1][j-3].getId() + convertHabitatState(i+1, j-3) + " - ";
+                }
+
+                if(i == 3 && j < 3){
+                    map += habitats[i-2][j].getId() + convertHabitatState(i-2, j) + " - ";
+                } else if(i == 3 && j > 2){
+                    map += habitats[i][j-1].getId() + convertHabitatState(i, j-1)+ " - ";
+                }
+
+                if(i == 4 && j < 3){
+                    map += habitats[i-3][j+3].getId() + convertHabitatState(i-3, j+3) + " - ";
+                } else if(i == 4 && j > 2){
+                    map += habitats[i][j-3].getId() + convertHabitatState(i, j-3) + " - ";
+                }
+
+                if(i == 5 && j < 3){
+                    map += habitats[i-4][j+6].getId() + convertHabitatState(i-4, j+6) + " - ";
+                } else if(i == 5 && j > 2){
+                    map += habitats[i-1][j-1].getId() + convertHabitatState(i-1, j-1) + " - ";
+                }
+            }
+            map += "\n";
+        }
+
+        return map;
+    }
+
+    public String convertHabitatState(int row, int column){
+        String state = "E";//it's method's return
+
+        if(habitats[row][column].getHabitatState() == HabitatState.EMPTY){
+            state = "V";
+        } else if (habitats [row][column].getHabitatState() == HabitatState.BUSY_HEALTHY){
+            state = "S";
+        }
+
+        return state;
+    }
 }   

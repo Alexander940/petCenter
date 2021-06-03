@@ -28,6 +28,8 @@ public class Main {
         int option;
         boolean toggle;
 
+        ppal.petCenter.createHabitats();
+
         do{
             option = ppal.showMenu();
             toggle = ppal.operations(option);
@@ -36,13 +38,98 @@ public class Main {
 
     /**
      * <b>Description:</b> it shows the user's menu
-     * @return <i>option int</i> it constains the option choosed by user
+     * @return <i>option int</i> it contains the option chose by user
      * */
 
     public int showMenu(){
+        int option;//it's method's return
+
+        System.out.println("\n (General menu) \n \n" +
+                "1. Emergencies veterinaries \n" +
+                "2. pet's kindergarten\n" +
+                "0. get out");
+        option = sc.nextInt();
+        sc.nextLine();
+
+        return option;
+    }
+
+    public boolean operations(int option){
+        boolean toggle = true;
+        int chose;
+        boolean cent = false;
+
+
+        switch (option) {
+            case 1:
+                do {
+                    chose = emergenciesMenu();
+                    cent = emergenciesOperations(chose);
+                }while (cent);
+                break;
+            case 2:
+                do {
+                    chose = kinderMenu();
+                    cent = kinderOperations(chose);
+                }while (cent);
+                break;
+            case 0:
+                toggle = false;
+                break;
+            }
+
+
+        return toggle;
+    }
+
+    public int kinderMenu(){
         int option;
 
-        System.out.println("What do you wanna do\n" +
+        System.out.println("\n (Kinder menu) \n \n" +
+                            "1. Enter pet \n" +
+                           "2. finding pet \n" +
+                           "3. print map \n" +
+                           "4. show habitat's information\n" +
+                           "5. show statistics");
+        option = sc.nextInt();
+        sc.nextLine();
+
+        return option;
+    }
+
+    public boolean kinderOperations(int option){
+        boolean toggle = true;
+
+        switch(option){
+            case 1:
+
+                break;
+            case 2:
+                break;
+            case 3:
+                System.out.println(petCenter.showMap());
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 0:
+                toggle = false;
+                break;
+        }
+
+        return toggle;
+    }
+
+    /**
+     * <b>Description:</b> it shows the emergencies menu
+     * @return <i>option int</i> it contains the option chose by user
+     * */
+
+    public int emergenciesMenu(){
+        int option;
+
+        System.out.println("\n (Emergencies menu) \n \n" +
                             "1. add a pet\n" +
                             "2. add a veterinary \n" + 
                             "3. starting appointment \n" +
@@ -50,7 +137,8 @@ public class Main {
                             "5. number of pets without attention\n" +
                             "6. delete a veterinary\n" +
                             "7. remove a pet without attention\n" +
-                            "0. Close petCenter"
+                            "8. Show statistics\n" +
+                            "0. Get out"
                 );
 
         option = sc.nextInt();
@@ -61,9 +149,10 @@ public class Main {
 
     /**
      * <b>Description:</b> it execute the operations
+     * @param option <i>int</i> it contains the option chose by the user
      * */
 
-    public boolean operations(int option){
+    public boolean emergenciesOperations(int option){
         boolean toggle = true;
 
         switch(option){
@@ -88,8 +177,11 @@ public class Main {
             case 7: 
                 removePet();
                 break;
-            case 0: 
-                toggle = closePetCenter();
+            case 8:
+                closePetCenter();
+                break;
+            case 0:
+                toggle = false;
                 break;
         }
 
