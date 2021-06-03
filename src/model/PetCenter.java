@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Locale;
+
 /**
  * <b>Description:</b> this class contains the attributes and methods of a pet center
  * @author Alexander Echeverry
@@ -8,6 +10,7 @@ package model;
 
 public class PetCenter {
     public final int NUM_TYPES_HABITATS = 5;//it contains the number of habitats in kindergarten
+    public static final int MAX_HABITATS_PER_SPECIES = 9;//it contains the maximum of habitats per species
     public final int MAX_VETERINARIES = 7;//it's the maximum of veterinaries
     public final int MAX_PETS = 120;//it's the maximum of pets allowed per day
     private int petNumber;//it contains the number of pets in the pet center
@@ -568,6 +571,12 @@ public class PetCenter {
         }
     }
 
+    /**
+     * <b>Description:</b> it finds a habitat empty and return his position
+     * @param species <i>Species,</i> it contains the pet's species for searching a habitat for that species
+     * @return <i>position int[],</i> it contains the position of habitat found
+     */
+
     private int [] habitatEmpty(Species species){
         int [] position = new int[2];//it contains the position of a habitat empty in matrix habitats
         position[0] = -1;//it is a default value if there isn't a habitat free
@@ -618,9 +627,15 @@ public class PetCenter {
         return position;
     }
 
+    /**
+     * <b>Description:</b> it finds a habitat empty, return true if it found a habitat empty or false otherwise
+     * @param species <i>String,</i> it contains the pet's species for searching a habitat for that species
+     * @return <i>toggle boolean</i> it's true if the habitat was found or false otherwise
+     */
+
     public boolean habitatEmpty(String species){
         boolean toggle = false;//it's method's return
-        boolean cent = false;
+        boolean cent = false;//it's a sent, it controls the cycles for
 
         if(Species.valueOf(species.toUpperCase()) == Species.DOG){
             for(int i = 0; i < 9 && !cent; i++){
@@ -662,6 +677,10 @@ public class PetCenter {
         return toggle;
     }
 
+    /**
+     * <b>Description:</b> it creates objects of habitats
+     * <b>pos:</b> the matrix habitats contains 30 new objects
+     */
 
     public void createHabitats(){
         habitats[0][0] = new CatHabitat("G1", "12", "12", "12", "12");
@@ -699,6 +718,11 @@ public class PetCenter {
         habitats[4][2] = new BirdHabitat("A3", "12", "12", 4, "12", TypeCage.FLAT);
         habitats[4][3] = new BirdHabitat("A3", "12", "12", 4, "12", TypeCage.FLAT);
     }
+
+    /**
+     * <b>Description:</b> it shows a map with the id and state of all habitats of matrix habitats
+     * @return <i>map String,</i> it contains the map
+     */
 
     public String showMap(){
         String map = "";//it's method's return
@@ -766,11 +790,12 @@ public class PetCenter {
      * @param dataPet <i>String [],</i> it contains pet's data
      * @param dataOwner <i>String [],</i> it contains owner's data
      * @param species <i>String</i> it contains pet's species
-     * @param daysToUse <i>int</i> it contains the days to use habitat 
-     * @return
+     * @param daysToUse <i>int</i> it contains the days to use habitat
+     * @return <i>id String,</i> it contains the id of habitat assigned
      */
+
     public String addPet(String [] dataPet, String [] dataOwner, String species, int daysToUse){
-        String feedback = "";
+        String id = "";//it's method's return
         int [] position;
 
         position = habitatEmpty(Species.valueOf(species.toUpperCase()));
@@ -778,8 +803,45 @@ public class PetCenter {
         habitats[position[0]][position[1]].setHabitatState(HabitatState.BUSY_HEALTHY);
         habitats[position[0]][position[1]].setDaysToUse(daysToUse);
 
-        feedback = habitats[position[0]][position[1]].getId();
+        id = habitats[position[0]][position[1]].getId();
 
-        return feedback;
+        return id;
+    }
+
+    /**
+     * <b>Description:</b> it finds a pet in the nursery with his name
+     * @param name <i>String,</i> it contains the name of pet for searching
+     * @return <i>data String,</i> it contains the pet's information of the habitat
+     */
+    public String findPetNursery(String name){
+        String data= "";
+
+        for(int i = 0; i < NUM_TYPES_HABITATS; i++){
+            for(int j = 0; j < MAX_HABITATS_PER_SPECIES && habitats[i][j].getPet() != null; j++){
+                if (habitats[i][j].getPet().getName().equalsIgnoreCase(name)) {
+                        data += "the pet " + name + " is in zone of " + habitats[i][j].getPet().getSpecies().name().toLowerCase() + " the id is " + habitats[i][j].getId() + " and the pet is " + getStateOfPet(habitats[i][j].getHabitatState()) + "\n";
+                }
+            }
+        }
+
+        return data;
+    }
+
+    /**
+     * <b>Description::</b> it return healthy if the habitat state is equals to BUSY_HEALTHY or sick if habitat state is equals to BUSY_SICK
+     * @param habitatState <i>HabitatState,</i> it contains the habitat state
+     * @return <i>state String,</i> it contains healthy or sick
+     */
+
+    private String getStateOfPet(HabitatState habitatState){
+        String state = "";
+
+        if(habitatState == HabitatState.BUSY_HEALTHY){
+            state = "healthy";
+        } else {
+            state = "sick";
+        }
+
+        return state;
     }
 }   

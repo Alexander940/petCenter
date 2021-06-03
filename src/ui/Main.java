@@ -90,7 +90,8 @@ public class Main {
                            "2. finding pet \n" +
                            "3. print map \n" +
                            "4. show habitat's information\n" +
-                           "5. show statistics");
+                           "5. show statistics\n" +
+                            "0. get out");
         option = sc.nextInt();
         sc.nextLine();
 
@@ -105,6 +106,7 @@ public class Main {
                 addPetKinder();
                 break;
             case 2:
+                findPetNursery();
                 break;
             case 3:
                 System.out.println(petCenter.showMap());
@@ -495,5 +497,14 @@ public class Main {
         }
         
         return toggle;
+    }
+
+    public void findPetNursery(){
+        String name;
+
+        System.out.println("Enter the pet's name");
+        name = sc.nextLine();
+
+        System.out.println(petCenter.findPetNursery(name));
     }
 }

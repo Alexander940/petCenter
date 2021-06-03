@@ -41,4 +41,8 @@ public abstract class Habitat {
     public void setDaysToUse(int daysToUse) {
         this.daysToUse = daysToUse;
     }
+
+    public Pet getPet() {
+        return pet;
+    }
 }
