@@ -516,6 +516,10 @@ public class Main {
         System.out.println(petCenter.findPetNursery(name));
     }
 
+    /**
+     * <b>Description:</b> it ask for habitat's id for searching and it calls the method findHabitat in model
+     */
+
     private void findHabitat(){
         String id;
 
@@ -524,6 +528,10 @@ public class Main {
 
         System.out.println(petCenter.findHabitat(id));
     }
+
+    /**
+     * <b>Description:</b> it print the statistics
+     */
 
     private void showStatisticsNursery(){
         System.out.println(petCenter.showStatisticsNursery());

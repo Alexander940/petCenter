@@ -872,6 +872,11 @@ public class PetCenter {
         return dataHabitat;
     }
 
+    /**
+     * <b>Description:</b> it shows the statistics of nursery
+     * @return <i>statistics String,</i> it contains the statistics of nursery
+     */
+
     public String showStatisticsNursery(){
         String statistics = "";
         int cont = 0;
